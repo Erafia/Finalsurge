@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -23,6 +24,7 @@ public class LoginPage extends BasePage {
         }
         catch (NoSuchElementException e){
             log.error("Page is not opened: element 'Login button' is not found.");
+            Assert.fail("Login page did not open.");
         }
         return this;
     }

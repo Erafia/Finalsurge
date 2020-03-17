@@ -4,8 +4,12 @@ import com.codeborne.selenide.Condition;
 import lombok.extern.log4j.Log4j2;
 import models.QuickAddWorkout;
 import org.openqa.selenium.By;
+import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$;
+import static elements.Checkbox.updateCheckbox;
+import static elements.Dropdown.selectOption;
+import static elements.Input.writeText;
 
 @Log4j2
 public class QuickAddForm extends BasePage {
@@ -36,58 +40,26 @@ public class QuickAddForm extends BasePage {
     void isPageOpened() {
         log.debug("Checking the 'WORKOUT QUICK ADD' form is opened.");
         $(By.id(QUICK_ADD_FORM_HEADER_ID)).shouldBe(Condition.visible);
+        Assert.fail("Quick add form did not open.");
     }
 
     public QuickAddForm fillInTheForm(QuickAddWorkout workoutModel) {
-        if (workoutModel.getDate() != null) {
-            $(By.id(DATE_FIELD_ID)).clear();
-            $(By.id(DATE_FIELD_ID)).sendKeys(workoutModel.getDate());
-        }
-        if (workoutModel.getTimeOfDay() != null) {
-            $(By.id(TIME_FIELD_ID)).sendKeys(workoutModel.getTimeOfDay());
-        }
-        if (workoutModel.getActivityType() != null) {
-            $(By.id(ACTIVITY_TYPE_DROPDOWN_ID)).selectOption(workoutModel.getActivityType());
-        }
-        if (workoutModel.getWorkoutName() != null) {
-            $(By.id(NAME_FIELD_ID)).sendKeys(workoutModel.getWorkoutName());
-        }
-        if (workoutModel.getWorkoutDescription() != null) {
-            $(By.id(DESCRIPTION_FIELD_ID)).sendKeys(workoutModel.getWorkoutDescription());
-        }
-        if (workoutModel.getShowPlannedDistanceDuration() != null) {
-            $(By.id(PLANNED_CHECKBOX_ID)).setSelected(Boolean.parseBoolean(workoutModel.getShowPlannedDistanceDuration()));
-        }
-        if (workoutModel.getDistance() != null) {
-            $(By.id(DISTANCE_FIELD_ID)).sendKeys(workoutModel.getDistance());
-        }
-        if (workoutModel.getDistanceUnit() != null) {
-            $(By.id(DISTANCE_TYPE_DROPDOWN_ID)).selectOption(workoutModel.getDistanceUnit());
-        }
-        if (workoutModel.getDuration() != null) {
-            $(By.id(DURATION_FIELD_ID)).sendKeys(workoutModel.getDuration());
-        }
-        if (workoutModel.getPace() != null) {
-            $(By.id(PACE_FIELD_ID)).sendKeys(workoutModel.getPace());
-        }
-        if (workoutModel.getPaceUnit() != null) {
-            $(By.id(PACE_TYPE_DROPDOWN_ID)).selectOption(workoutModel.getPaceUnit());
-        }
-        if (workoutModel.getHowIFelt() != null) {
-            $(By.id(HOW_FEEL_DROPDOWN_ID)).selectOption(workoutModel.getHowIFelt());
-        }
-        if (workoutModel.getPerceivedEffort() != null) {
-            $(By.id(PERCEIVED_EFFORT_DROPDOWN_ID)).selectOption(workoutModel.getPerceivedEffort());
-        }
-        if (workoutModel.getNotes() != null) {
-            $(By.id(NOTES_FIELD_ID)).sendKeys(workoutModel.getNotes());
-        }
-        if (workoutModel.getMarkAsRace() != null) {
-            $(By.id(IS_RACE_CHECKBOX_ID)).setSelected(Boolean.parseBoolean(workoutModel.getMarkAsRace()));
-        }
-        if (workoutModel.getSaveToLibrary() != null) {
-            $(By.id(SAVE_TO_LIBRARY_CHECKBOX_ID)).setSelected(Boolean.parseBoolean(workoutModel.getSaveToLibrary()));
-        }
+        writeText(DATE_FIELD_ID, workoutModel.getDate());
+        writeText(TIME_FIELD_ID, workoutModel.getTimeOfDay());
+        writeText(NAME_FIELD_ID, workoutModel.getWorkoutName());
+        writeText(DESCRIPTION_FIELD_ID, workoutModel.getWorkoutDescription());
+        writeText(DISTANCE_FIELD_ID, workoutModel.getDistance());
+        writeText(DURATION_FIELD_ID, workoutModel.getDuration());
+        writeText(PACE_FIELD_ID, workoutModel.getPace());
+        writeText(NOTES_FIELD_ID, workoutModel.getNotes());
+        selectOption(ACTIVITY_TYPE_DROPDOWN_ID, workoutModel.getActivityType());
+        selectOption(DISTANCE_TYPE_DROPDOWN_ID, workoutModel.getDistanceUnit());
+        selectOption(PACE_TYPE_DROPDOWN_ID, workoutModel.getPaceUnit());
+        selectOption(HOW_FEEL_DROPDOWN_ID, workoutModel.getHowIFelt());
+        selectOption(PERCEIVED_EFFORT_DROPDOWN_ID, workoutModel.getPerceivedEffort());
+        updateCheckbox(PLANNED_CHECKBOX_ID, workoutModel.getShowPlannedDistanceDuration());
+        updateCheckbox(IS_RACE_CHECKBOX_ID, workoutModel.getMarkAsRace());
+        updateCheckbox(SAVE_TO_LIBRARY_CHECKBOX_ID, workoutModel.getSaveToLibrary());
         return this;
     }
 

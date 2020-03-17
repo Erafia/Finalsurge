@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import models.QuickAddWorkout;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.testng.Assert;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -18,9 +19,10 @@ import static com.codeborne.selenide.Selenide.open;
 public class CalendarPage extends BasePage {
     private static final String CALENDAR_URL = "https://log.finalsurge.com/Calendar.cshtml";
     private static final String CALENDAR_ID = "CalendarContent";
-    private String DATE_XPATH = "//td[@data-day = %s and @data-month = %s and @data-year = %s]//td[@align = 'center']";
-    private static final String OPEN_DROPDOWN_ON_DATE_CLASS = ".calendar-add.dropdown";
-    private String WORKOUT_XPATH = "/../../../../..//div[text() = '%s']";
+    private String DATE_XPATH = "//td[@data-day = %s and @data-month = %s and @data-year = %s]";
+    private String DATE_HOVER_XPATH = "//td[@align = 'center']";
+    private static final String OPEN_DROPDOWN_ON_DATE_CSS = ".calendar-add.dropdown";
+    private String WORKOUT_XPATH = "//div[text() = '%s']";
 
     public CalendarPage openPage() {
         log.info("Opening Calendar page of the application by url: " + CALENDAR_URL);
@@ -29,6 +31,7 @@ public class CalendarPage extends BasePage {
             isPageOpened();
         } catch (NoSuchElementException e) {
             log.error("Page is not opened: element 'Calendar' is not found.");
+            Assert.fail("Calendar page did not open.");
         }
         return this;
     }
@@ -49,8 +52,8 @@ public class CalendarPage extends BasePage {
     public CalendarPage selectOptionFromDropDownOnDate(int day, int month, int year, String option) {
         log.info("Select '" + option + "' option for the date: " + month + "/" + day + "/" + year);
         DATE_XPATH = String.format(DATE_XPATH, day, month, year);
-        $(By.xpath(DATE_XPATH)).hover()
-                .find(OPEN_DROPDOWN_ON_DATE_CLASS).click();
+        $(By.xpath(DATE_XPATH + DATE_HOVER_XPATH)).hover()
+                .find(OPEN_DROPDOWN_ON_DATE_CSS).click();
         $(By.partialLinkText(option)).click();
         return this;
     }
