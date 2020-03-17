@@ -1,5 +1,5 @@
 # Finalsurge
-What checks tobe covered within the framework: 
+What checks to be covered within the framework: 
 
 Check it is possible to add a workout to the calendar via Quick Add
 Check it is possible to add a workout to the calendar via Full Add
