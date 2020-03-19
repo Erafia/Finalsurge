@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 @Log4j2
-public class QuickAddTests extends BaseTest {
+public class FullAddTests extends BaseTest {
     Workout workout;
     int initialNumberOfWorkouts;
     int finalNumberOfWorkouts;
@@ -18,7 +18,17 @@ public class QuickAddTests extends BaseTest {
     public void createWorkout(){
         workout = Workout.builder()
                 .date("3/14/2020")
-                .activityType("Run")
+                .timeOfDay("05:45 AM")
+                .workoutName("Chasing smoke on the water")
+                .workoutDescription("Trying explain why does this workout start sooo early")
+                .showPlannedDistanceDuration("true")
+                .distance("500")
+                .distanceUnit("m")
+                .duration("01:15:00")
+                .markAsRace("true")
+                .perceivedEffort("6 (Moderate)")
+                .howIFelt("Good")
+                .caloriesBurnt("42")
                 .build();
     }
 
@@ -28,11 +38,11 @@ public class QuickAddTests extends BaseTest {
     }
 
     @Test
-    public void checkTrainingAddedViaQuickAdd(){
+    public void checkTrainingAddedViaFullAdd(){
         initialNumberOfWorkouts = calendarSteps.getWorkoutsCount(14);
-        calendarSteps.openQuickAddForm(14)
-                .submitQuickAddForm(workout)
-                .checkWorkoutAdded(workout);
+        calendarSteps.openFullAddPage(14);
+        fullAddSteps.selectWorkoutTypeSubtype("Swim", "Endurance")
+                    .submitFullAddForm(workout);
         finalNumberOfWorkouts = calendarSteps.getWorkoutsCount(14);
         assertEquals(initialNumberOfWorkouts + 1,finalNumberOfWorkouts, "Workouts count did not increase.");
     }

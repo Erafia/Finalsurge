@@ -3,12 +3,14 @@ package tests;
 import com.codeborne.selenide.Configuration;
 import org.testng.annotations.BeforeClass;
 import steps.CalendarSteps;
+import steps.FullAddWorkoutSteps;
 import steps.LoginRegistrationSteps;
 import utils.PropertyManager;
 
 public class BaseTest {
     LoginRegistrationSteps loginRegistrationSteps;
     CalendarSteps calendarSteps;
+    FullAddWorkoutSteps fullAddSteps;
     PropertyManager pManager;
     protected String password;
     protected String email;
@@ -23,5 +25,6 @@ public class BaseTest {
         Configuration.screenshots = true;
         loginRegistrationSteps = new LoginRegistrationSteps();
         calendarSteps = new CalendarSteps();
+        fullAddSteps = new FullAddWorkoutSteps();
     }
 }

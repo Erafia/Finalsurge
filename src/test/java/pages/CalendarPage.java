@@ -1,8 +1,9 @@
 package pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import lombok.extern.log4j.Log4j2;
-import models.QuickAddWorkout;
+import models.Workout;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
@@ -23,6 +24,7 @@ public class CalendarPage extends BasePage {
     private String DATE_HOVER_XPATH = "//td[@align = 'center']";
     private static final String OPEN_DROPDOWN_ON_DATE_CSS = ".calendar-add.dropdown";
     private String WORKOUT_XPATH = "//div[text() = '%s']";
+    private String WORKOUT_CSS = ".fc-event-activity";
 
     public CalendarPage openPage() {
         log.info("Opening Calendar page of the application by url: " + CALENDAR_URL);
@@ -69,25 +71,42 @@ public class CalendarPage extends BasePage {
     }
 
     /**
-     * This method is used to validate presence or not presence of a workout on a certain date
+     * This method is used to validate presence or not presence of a workout with particular Activity type on a certain date
      *
-     * @param quickAddWorkout - date is taken from the workout
+     * @param workout - date is taken from the workout
      * @param shouldBePresent - set false in case the workout should not be added to the calendar
      */
-    public CalendarPage checkWorkoutAddedToCalendar(QuickAddWorkout quickAddWorkout, boolean shouldBePresent) {
-        log.info("Check a workout was added to the date " + quickAddWorkout.getDate() + " and Activity type '" +quickAddWorkout.getActivityType() + "'");
-        List<Integer> dateItems = splitDate(quickAddWorkout.getDate());
+    public CalendarPage checkWorkoutAddedToCalendar(Workout workout, boolean shouldBePresent) {
+        log.debug("Check a workout was added to the date " + workout.getDate() + " and Activity type '" + workout.getActivityType() + "'");
+        List<Integer> dateItems = splitDate(workout.getDate());
         int month = dateItems.get(0);
         int day = dateItems.get(1);
         int year = dateItems.get(2);
         DATE_XPATH = String.format(DATE_XPATH, day, month, year);
-        WORKOUT_XPATH = String.format(WORKOUT_XPATH, quickAddWorkout.getActivityType());
+        WORKOUT_XPATH = String.format(WORKOUT_XPATH, workout.getActivityType());
         if (shouldBePresent) {
             $(By.xpath(DATE_XPATH + WORKOUT_XPATH)).shouldBe(Condition.visible);
         } else {
             $(By.xpath(DATE_XPATH + WORKOUT_XPATH)).shouldNotBe(Condition.visible);
         }
         return this;
+    }
+
+    public int getNumberOfTrainingsOnDate(int day, int month, int year){
+        log.info("Checking number of workouts created for date: " + month + "/" + day + "/" + year);
+        DATE_XPATH = String.format(DATE_XPATH, day, month, year);
+        List<SelenideElement> workouts = $(By.xpath(DATE_XPATH)).findAll(WORKOUT_CSS);
+        log.info("The number of workouts is: " + workouts.size());
+        return workouts.size();
+    }
+    public int getNumberOfTrainingsOnDate(int day, int month){
+        Calendar now = Calendar.getInstance();
+        return getNumberOfTrainingsOnDate(day, month, now.get(Calendar.YEAR));
+    }
+
+    public int getNumberOfTrainingsOnDate(int day){
+        Calendar now = Calendar.getInstance();
+        return getNumberOfTrainingsOnDate(day, now.get(Calendar.MONTH) + 1, now.get(Calendar.YEAR));
     }
 
     public static List<Integer> splitDate(String date) {
