@@ -10,9 +10,9 @@ public class Input {
 
     public static void writeText(String id, String text) {
         if (StringUtils.isNotEmpty(text)) {
+            log.info("Filling in field with id = " + id + " with text: " + text);
             $(By.id(id)).clear();
             $(By.id(id)).sendKeys(text);
-            log.info("Filling in field with id = " + id + " with text: " + text);
         }
     }
 }

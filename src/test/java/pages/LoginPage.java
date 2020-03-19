@@ -24,7 +24,7 @@ public class LoginPage extends BasePage {
         }
         catch (NoSuchElementException e){
             log.error("Page is not opened: element 'Login button' is not found.");
-            Assert.fail("Login page did not open.");
+            Assert.fail("Login page cannot be opened.");
         }
         return this;
     }

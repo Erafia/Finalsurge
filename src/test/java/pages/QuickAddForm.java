@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import lombok.extern.log4j.Log4j2;
 import models.QuickAddWorkout;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -39,8 +40,12 @@ public class QuickAddForm extends BasePage {
 
     void isPageOpened() {
         log.debug("Checking the 'WORKOUT QUICK ADD' form is opened.");
-        $(By.id(QUICK_ADD_FORM_HEADER_ID)).shouldBe(Condition.visible);
-        Assert.fail("Quick add form did not open.");
+        try {
+            $(By.id(QUICK_ADD_FORM_HEADER_ID)).shouldBe(Condition.visible);
+        } catch (NoSuchElementException e) {
+            log.error("Form is not opened: header element is not found.");
+            Assert.fail("Quick add form cannot be opened.");
+        }
     }
 
     public QuickAddForm fillInTheForm(QuickAddWorkout workoutModel) {

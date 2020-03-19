@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Selenide.open;
 
 @Log4j2
 public class CalendarPage extends BasePage {
-    private static final String CALENDAR_URL = "https://log.finalsurge.com/Calendar.cshtml";
+    private static final String CALENDAR_URL = DASHBOARD_URL + "Calendar.cshtml";
     private static final String CALENDAR_ID = "CalendarContent";
     private String DATE_XPATH = "//td[@data-day = %s and @data-month = %s and @data-year = %s]";
     private String DATE_HOVER_XPATH = "//td[@align = 'center']";
@@ -31,7 +31,7 @@ public class CalendarPage extends BasePage {
             isPageOpened();
         } catch (NoSuchElementException e) {
             log.error("Page is not opened: element 'Calendar' is not found.");
-            Assert.fail("Calendar page did not open.");
+            Assert.fail("Calendar page cannot be opened.");
         }
         return this;
     }

@@ -11,8 +11,8 @@ public class Dropdown {
 
     public static void selectOption(String id, String text) {
         if (StringUtils.isNotEmpty(text)) {
-            $(By.id(id)).selectOption(text);
             log.info("Selecting  '" + text + "' option from dropdown with id = " + id);
+            $(By.id(id)).selectOption(text);
         }
     }
 }

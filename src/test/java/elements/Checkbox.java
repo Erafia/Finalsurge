@@ -11,8 +11,8 @@ public class Checkbox {
 
     public static void updateCheckbox(String id, String text) {
         if (StringUtils.isNotEmpty(text)) {
-            $(By.id(id)).setSelected(Boolean.parseBoolean(text));
             log.info("Setting checkbox with id " + id + " " + text);
+            $(By.id(id)).setSelected(Boolean.parseBoolean(text));
         }
     }
 }

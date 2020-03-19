@@ -14,7 +14,7 @@ public class BaseTest {
     protected String email;
 
     @BeforeClass
-    public void setup_Driver(){
+    public void baseSetupDriver(){
         pManager = PropertyManager.getInstance();
         password = pManager.get("password");
         email  = pManager.get("email");
