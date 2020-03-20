@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class QuickAddWorkout {
+public class Workout {
     public String date;
     public String timeOfDay;
     public String activityType;
@@ -22,5 +22,5 @@ public class QuickAddWorkout {
     public String notes;
     public String markAsRace;
     public String saveToLibrary;
-
+    public String caloriesBurnt;
 }
