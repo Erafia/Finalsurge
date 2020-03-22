@@ -13,8 +13,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 @Log4j2
 public class CalendarPage extends BasePage {
@@ -27,6 +26,7 @@ public class CalendarPage extends BasePage {
     private String WORKOUT_CSS = ".fc-event-activity";
     private String WORKOUT_CALL_XPATH = "/ancestor::div[starts-with(@id, 'wid')]";
     private String ALERT_OK_BUTTON_CSS = ".btn.btn-primary";
+    private String DATE_PICKER_XPATH = "//div[@class = 'datepicker dropdown-menu' and contains(@style, 'display: block')]//td[@class = 'day ' and text() = '%s']";
 
     public CalendarPage openPage() {
         log.info("Opening Calendar page of the application by url: " + CALENDAR_URL);
@@ -35,6 +35,7 @@ public class CalendarPage extends BasePage {
             isPageOpened();
         } catch (NoSuchElementException e) {
             log.error("Page is not opened: element 'Calendar' is not found.");
+            screenshot("calendar_page_not_opened");
             Assert.fail("Calendar page cannot be opened.");
         }
         return this;
@@ -94,7 +95,7 @@ public class CalendarPage extends BasePage {
         return this;
     }
 
-    public int getNumberOfTrainingsOnDate(int day, int month, int year){
+    public int getNumberOfWorkoutsOnDate(int day, int month, int year){
         log.info("Checking number of workouts created for date: " + month + "/" + day + "/" + year);
         String THIS_DATE_XPATH = String.format(DATE_XPATH, day, month, year);
         List<SelenideElement> workouts = $(By.xpath(THIS_DATE_XPATH)).findAll(WORKOUT_CSS);
@@ -102,14 +103,14 @@ public class CalendarPage extends BasePage {
         return workouts.size();
     }
 
-    public int getNumberOfTrainingsOnDate(int day, int month){
+    public int getNumberOfWorkoutsOnDate(int day, int month){
         Calendar now = Calendar.getInstance();
-        return getNumberOfTrainingsOnDate(day, month, now.get(Calendar.YEAR));
+        return getNumberOfWorkoutsOnDate(day, month, now.get(Calendar.YEAR));
     }
 
-    public int getNumberOfTrainingsOnDate(int day){
+    public int getNumberOfWorkoutsOnDate(int day){
         Calendar now = Calendar.getInstance();
-        return getNumberOfTrainingsOnDate(day, now.get(Calendar.MONTH) + 1, now.get(Calendar.YEAR));
+        return getNumberOfWorkoutsOnDate(day, now.get(Calendar.MONTH) + 1, now.get(Calendar.YEAR));
     }
 
     public static List<Integer> splitDate(String date) {
@@ -136,6 +137,12 @@ public class CalendarPage extends BasePage {
 
     public CalendarPage confirmAlert(){
         $(ALERT_OK_BUTTON_CSS).click();
+        return this;
+    }
+
+    public CalendarPage selectDayInDatePicker(int day){
+        String THIS_DATE_PICKER = String.format(DATE_PICKER_XPATH, day);
+        $(By.xpath(THIS_DATE_PICKER)).click();
         return this;
     }
 }

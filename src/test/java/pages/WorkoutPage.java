@@ -5,12 +5,15 @@ import lombok.extern.log4j.Log4j2;
 import models.Workout;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.testng.Assert;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.screenshot;
 import static org.testng.Assert.assertEquals;
 
 @Log4j2
@@ -34,7 +37,14 @@ public class WorkoutPage extends BasePage {
 
     void isPageOpened() {
         log.debug("Checking the Workout page is opened.");
-        $(By.id(WORKOUT_BOX_ID)).shouldBe(Condition.visible);
+        try {
+            $(By.id(WORKOUT_BOX_ID)).shouldBe(Condition.visible);
+        }
+        catch (NoSuchElementException e){
+            log.error("Workout page is not opened: element 'workout box' is not displayed.");
+            screenshot("workout_page_not_opened");
+            Assert.fail("Workout page cannot be opened.");
+        }
     }
 
     public void compareWorkoutInfo(Workout workout){
@@ -74,8 +84,7 @@ public class WorkoutPage extends BasePage {
     }
 
     public String[] stringProcessor(String stats, String delimiter){
-        String[] statsValues = stats.split(delimiter);
-        return statsValues;
+        return stats.split(delimiter);
     }
 
     public String[] stringProcessor(String stats){

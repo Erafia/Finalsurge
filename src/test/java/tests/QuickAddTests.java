@@ -27,8 +27,8 @@ public class QuickAddTests extends BaseTest {
         loginRegistrationSteps.login(email, password);
     }
 
-    @Test
-    public void checkTrainingAddedViaQuickAdd(){
+    @Test (description = "Check workout added via 'Quick Add' function is displayed in the calendar")
+    public void checkWorkoutAddedViaQuickAdd(){
         initialNumberOfWorkouts = calendarSteps.getWorkoutsCount(14);
         calendarSteps.openQuickAddForm(14)
                 .submitQuickAddForm(workout)

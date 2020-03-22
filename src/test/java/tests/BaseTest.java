@@ -2,11 +2,15 @@ package tests;
 
 import com.codeborne.selenide.Configuration;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import steps.CalendarSteps;
 import steps.FullAddWorkoutSteps;
 import steps.LoginRegistrationSteps;
 import steps.WorkoutPageSteps;
+import tests.utils.TestListener;
 import utils.PropertyManager;
+
+@Listeners(TestListener.class)
 
 public class BaseTest {
     LoginRegistrationSteps loginRegistrationSteps;

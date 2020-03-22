@@ -20,4 +20,9 @@ public class LoginRegistrationSteps {
                 .logIn(email, password);
         return this;
     }
+
+    @Step ("Logout from the application.")
+    public void logout(){
+        loginPage.logout();
+    }
 }

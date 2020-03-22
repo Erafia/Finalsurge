@@ -51,7 +51,7 @@ public class CalendarSteps {
     @Step ("Get number of workouts for day {day}")
     public int getWorkoutsCount(int day){
         return calendarPage.openPage()
-                           .getNumberOfTrainingsOnDate(day);
+                           .getNumberOfWorkoutsOnDate(day);
     }
 
     @Step ("Confirm alert")
@@ -64,5 +64,19 @@ public class CalendarSteps {
     public void verifyWorkoutRemoved(Workout workout){
         calendarPage.confirmAlert()
                 .checkWorkoutAddedToCalendar(workout, false);
+    }
+
+    @Step ("Move workouts from day {dateFrom} to day {dateTo}")
+    public void moveWorkoutsToSelectedDay(int dateFrom, int dateTo){
+        calendarPage.openPage()
+                .selectOptionFromDropDownOnDate(dateFrom, "Move Day")
+                .selectDayInDatePicker(dateTo);
+    }
+
+    @Step ("Copy workouts from day {dateFrom} to day {dateTo}")
+    public void copyWorkoutsToSelectedDay(int dateFrom, int dateTo){
+        calendarPage.openPage()
+                .selectOptionFromDropDownOnDate(dateFrom, "Copy Day")
+                .selectDayInDatePicker(dateTo);
     }
 }

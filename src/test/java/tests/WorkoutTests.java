@@ -36,8 +36,8 @@ public class WorkoutTests extends BaseTest{
         loginRegistrationSteps.login(email, password);
     }
 
-    @Test
-    public void checkTraining(){
+    @Test (description = "Check workout is saved with values equal to the input values")
+    public void checkWorkoutContentCorrespondsInput(){
         calendarSteps.openFullAddPage(5);
         fullAddSteps.selectWorkoutTypeSubtype("Swim", "No Sub-Type")
                 .submitFullAddForm(workout);

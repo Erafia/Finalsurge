@@ -7,8 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static elements.Checkbox.updateCheckbox;
 import static elements.Dropdown.selectOption;
 import static elements.Input.writeText;
@@ -45,6 +44,7 @@ public class FullAddPage extends BasePage{
             isPageOpened();
         } catch (NoSuchElementException e) {
             log.error("Page is not opened: element 'Activity Type List' is not found.");
+            screenshot("Full_add_page_not_opened");
             Assert.fail("Full Add Workout page cannot be opened.");
         }
         return this;
@@ -59,7 +59,7 @@ public class FullAddPage extends BasePage{
         log.info("Select '" + activityType + "' activity type with subtype = '"+ activitySubtype + "'  from the list of activities");
         ACTIVITY_TYPE_ID = String.format(ACTIVITY_TYPE_ID, activityType);
         $(By.xpath(ACTIVITY_TYPE_ID)).click();
-        if (activitySubtype != "No Sub-Type") {
+        if (!activitySubtype.equals("No Sub-Type")) {
             ACTIVITY_SUBTYPE_ID = String.format(ACTIVITY_SUBTYPE_ID, activitySubtype);
             $(By.xpath(ACTIVITY_SUBTYPE_ID)).click();
         }

@@ -8,6 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.screenshot;
 import static elements.Dropdown.selectOption;
 
 @Log4j2
@@ -28,6 +29,7 @@ public class QuickAddForm extends FullAddPage {
             $(By.id(QUICK_ADD_FORM_HEADER_ID)).shouldBe(Condition.visible);
         } catch (NoSuchElementException e) {
             log.error("Form is not opened: header element is not found.");
+            screenshot("quick_add_form_not_opened");
             Assert.fail("Quick add form cannot be opened.");
         }
     }

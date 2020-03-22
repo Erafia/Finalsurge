@@ -37,8 +37,8 @@ public class FullAddTests extends BaseTest {
         loginRegistrationSteps.login(email, password);
     }
 
-    @Test
-    public void checkTrainingAddedViaFullAdd(){
+    @Test (description = "Check workout added via 'Full Add' function is displayed in the calendar")
+    public void checkWorkoutAddedViaFullAdd(){
         initialNumberOfWorkouts = calendarSteps.getWorkoutsCount(5);
         calendarSteps.openFullAddPage(5);
         fullAddSteps.selectWorkoutTypeSubtype("Swim", "Endurance")
