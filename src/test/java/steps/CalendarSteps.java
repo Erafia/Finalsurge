@@ -55,8 +55,9 @@ public class CalendarSteps {
     }
 
     @Step ("Confirm alert")
-    public void confirmAlert(Workout workout){
+    public CalendarSteps confirmAlert(){
         calendarPage.confirmAlert();
+        return this;
     }
 
     @Step ("Check workout is removed from the calendar")

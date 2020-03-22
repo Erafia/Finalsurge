@@ -15,7 +15,7 @@ public class WorkoutTests extends BaseTest{
         workout = Workout.builder()
                 .activityType("Swim")
                 .date("3/5/2020")
-                .timeOfDay("05:45 AM")
+                .timeOfDay("5:45 AM")
                 .workoutName("Chasing smoke on the water")
                 .workoutDescription("Trying explain why does this workout start sooo early")
                 .showPlannedDistanceDuration("true")
@@ -44,6 +44,7 @@ public class WorkoutTests extends BaseTest{
         calendarSteps.selectActionOnWorkout(workout,"View");
         workoutPageSteps.compare(workout);
         calendarSteps.selectActionOnWorkout(workout,"Delete");
-        calendarSteps.confirmAlert(workout);
+        calendarSteps.confirmAlert()
+                     .verifyWorkoutRemoved(workout);
     }
 }

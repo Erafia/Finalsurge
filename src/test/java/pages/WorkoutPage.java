@@ -6,6 +6,10 @@ import models.Workout;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import static com.codeborne.selenide.Selenide.$;
 import static org.testng.Assert.assertEquals;
 
@@ -45,9 +49,9 @@ public class WorkoutPage extends BasePage {
         String [] paceValues = stringProcessor($(By.xpath(PACE_XPATH)).getText());
         compareElements(workout.getPace(), paceValues[0]);
         compareElements(workout.getPaceUnit(), paceValues[1]);
-//        String [] dateValues = parseDate($(By.xpath(DATE_TIME_XPATH)).getText());
-//        compareElements(workout.getDate(), dateValues[0]);
-//        compareElements(workout.getTimeOfDay(), dateValues[1]);
+        String [] dateValues = parseDate($(By.xpath(DATE_TIME_XPATH)).getText());
+        compareElements(workout.getDate(), dateValues[0]);
+        compareElements(workout.getTimeOfDay(), dateValues[1]);
         compareElements(workout.getHowIFeltDropdown(), $(By.xpath(HOW_I_FELT_XPATH)).getText());
         compareElements(workout.getMoodRadioButton(), $(By.xpath(HOW_I_FELT_XPATH)).getText());
     }
@@ -60,14 +64,14 @@ public class WorkoutPage extends BasePage {
         }
     }
 
-//    public String[] parseDate(String date){
-//        String[] dateValues = date.split(" - ");
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale.ENGLISH);
-//        LocalDate lDate = LocalDate.parse(dateValues[0], formatter);
-//        formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
-//        dateValues[0] = lDate.format(formatter);
-//        return dateValues;
-//    }
+    public String[] parseDate(String date){
+        String[] dateValues = date.split(" - ");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy", Locale.ENGLISH);
+        LocalDate lDate = LocalDate.parse(dateValues[0], formatter);
+        formatter = DateTimeFormatter.ofPattern("M/d/yyyy");
+        dateValues[0] = lDate.format(formatter);
+        return dateValues;
+    }
 
     public String[] stringProcessor(String stats, String delimiter){
         String[] statsValues = stats.split(delimiter);
