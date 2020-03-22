@@ -32,10 +32,15 @@ public class QuickAddForm extends FullAddPage {
         }
     }
 
+
+    /**
+     * One should distinguish the mood radio button and how I felt dropdown when generating a workout model
+     * for quick add form a .howIFeltDropdown should be used when creating a model
+     */
     public QuickAddForm fillInTheForm(Workout workoutModel) {
         super.fillInTheForm(workoutModel);
         selectOption(ACTIVITY_TYPE_DROPDOWN_ID, workoutModel.getActivityType());
-        selectOption(HOW_FEEL_DROPDOWN_ID, workoutModel.getHowIFelt());
+        selectOption(HOW_FEEL_DROPDOWN_ID, workoutModel.getHowIFeltDropdown());
         return this;
     }
 

@@ -17,17 +17,17 @@ public class FullAddTests extends BaseTest {
     @BeforeClass
     public void createWorkout(){
         workout = Workout.builder()
-                .date("3/14/2020")
+                .date("3/5/2020")
                 .timeOfDay("05:45 AM")
                 .workoutName("Chasing smoke on the water")
                 .workoutDescription("Trying explain why does this workout start sooo early")
                 .showPlannedDistanceDuration("true")
-                .distance("500")
+                .distance("500.22")
                 .distanceUnit("m")
                 .duration("01:15:00")
                 .markAsRace("true")
                 .perceivedEffort("6 (Moderate)")
-                .howIFelt("Good")
+                .moodRadioButton("Good")
                 .caloriesBurnt("42")
                 .build();
     }
@@ -39,11 +39,11 @@ public class FullAddTests extends BaseTest {
 
     @Test
     public void checkTrainingAddedViaFullAdd(){
-        initialNumberOfWorkouts = calendarSteps.getWorkoutsCount(14);
-        calendarSteps.openFullAddPage(14);
+        initialNumberOfWorkouts = calendarSteps.getWorkoutsCount(5);
+        calendarSteps.openFullAddPage(5);
         fullAddSteps.selectWorkoutTypeSubtype("Swim", "Endurance")
                     .submitFullAddForm(workout);
-        finalNumberOfWorkouts = calendarSteps.getWorkoutsCount(14);
+        finalNumberOfWorkouts = calendarSteps.getWorkoutsCount(5);
         assertEquals(initialNumberOfWorkouts + 1,finalNumberOfWorkouts, "Workouts count did not increase.");
     }
 }

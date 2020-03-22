@@ -5,12 +5,14 @@ import org.testng.annotations.BeforeClass;
 import steps.CalendarSteps;
 import steps.FullAddWorkoutSteps;
 import steps.LoginRegistrationSteps;
+import steps.WorkoutPageSteps;
 import utils.PropertyManager;
 
 public class BaseTest {
     LoginRegistrationSteps loginRegistrationSteps;
     CalendarSteps calendarSteps;
     FullAddWorkoutSteps fullAddSteps;
+    WorkoutPageSteps workoutPageSteps;
     PropertyManager pManager;
     protected String password;
     protected String email;
@@ -26,5 +28,6 @@ public class BaseTest {
         loginRegistrationSteps = new LoginRegistrationSteps();
         calendarSteps = new CalendarSteps();
         fullAddSteps = new FullAddWorkoutSteps();
+        workoutPageSteps = new WorkoutPageSteps();
     }
 }
