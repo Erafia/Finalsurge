@@ -42,11 +42,41 @@ public class CalendarSteps {
         return this;
     }
 
+    @Step ("Select option {option} for the workout in the calendar")
+    public void selectActionOnWorkout(Workout workout, String option){
+        calendarPage.openPage()
+                .selectActionOnEventByActivityType(workout, option);
+    }
+
     @Step ("Get number of workouts for day {day}")
     public int getWorkoutsCount(int day){
         return calendarPage.openPage()
-                           .getNumberOfTrainingsOnDate(day);
+                           .getNumberOfWorkoutsOnDate(day);
     }
 
+    @Step ("Confirm alert")
+    public CalendarSteps confirmAlert(){
+        calendarPage.confirmAlert();
+        return this;
+    }
 
+    @Step ("Check workout is removed from the calendar")
+    public void verifyWorkoutRemoved(Workout workout){
+        calendarPage.confirmAlert()
+                .checkWorkoutAddedToCalendar(workout, false);
+    }
+
+    @Step ("Move workouts from day {dateFrom} to day {dateTo}")
+    public void moveWorkoutsToSelectedDay(int dateFrom, int dateTo){
+        calendarPage.openPage()
+                .selectOptionFromDropDownOnDate(dateFrom, "Move Day")
+                .selectDayInDatePicker(dateTo);
+    }
+
+    @Step ("Copy workouts from day {dateFrom} to day {dateTo}")
+    public void copyWorkoutsToSelectedDay(int dateFrom, int dateTo){
+        calendarPage.openPage()
+                .selectOptionFromDropDownOnDate(dateFrom, "Copy Day")
+                .selectDayInDatePicker(dateTo);
+    }
 }

@@ -6,26 +6,25 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-
 @Log4j2
-public class FullAddTests extends BaseTest {
+public class WorkoutTests extends BaseTest{
     Workout workout;
-    int initialNumberOfWorkouts;
-    int finalNumberOfWorkouts;
 
     @BeforeClass
     public void createWorkout(){
         workout = Workout.builder()
+                .activityType("Swim")
                 .date("3/5/2020")
-                .timeOfDay("05:45 AM")
+                .timeOfDay("5:45 AM")
                 .workoutName("Chasing smoke on the water")
                 .workoutDescription("Trying explain why does this workout start sooo early")
                 .showPlannedDistanceDuration("true")
                 .distance("500.22")
                 .distanceUnit("m")
-                .duration("01:15:00")
-                .markAsRace("true")
+                .duration("1:15:00")
+                .markAsRace("false")
+                .pace("14:59")
+                .paceUnit("min/100m")
                 .perceivedEffort("6 (Moderate)")
                 .moodRadioButton("Good")
                 .caloriesBurnt("42")
@@ -37,13 +36,15 @@ public class FullAddTests extends BaseTest {
         loginRegistrationSteps.login(email, password);
     }
 
-    @Test (description = "Check workout added via 'Full Add' function is displayed in the calendar")
-    public void checkWorkoutAddedViaFullAdd(){
-        initialNumberOfWorkouts = calendarSteps.getWorkoutsCount(5);
+    @Test (description = "Check workout is saved with values equal to the input values")
+    public void checkWorkoutContentCorrespondsInput(){
         calendarSteps.openFullAddPage(5);
-        fullAddSteps.selectWorkoutTypeSubtype("Swim", "Endurance")
-                    .submitFullAddForm(workout);
-        finalNumberOfWorkouts = calendarSteps.getWorkoutsCount(5);
-        assertEquals(initialNumberOfWorkouts + 1,finalNumberOfWorkouts, "Workouts count did not increase.");
+        fullAddSteps.selectWorkoutTypeSubtype("Swim", "No Sub-Type")
+                .submitFullAddForm(workout);
+        calendarSteps.selectActionOnWorkout(workout,"View");
+        workoutPageSteps.compare(workout);
+        calendarSteps.selectActionOnWorkout(workout,"Delete");
+        calendarSteps.confirmAlert()
+                     .verifyWorkoutRemoved(workout);
     }
 }

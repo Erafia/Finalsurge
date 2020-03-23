@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="2" verbose="5" name="Test suite" parallel="tests">
+    <listeners>
+        <listener class-name="utils.RetryListener"/>
+    </listeners>
+    <test name="loginUsingValidCredentials">
+        <classes>
+            <class name="tests.LoginTests"/>
+        </classes>
+    </test>
+    <test name="checkWorkoutAddedViaQuickAdd">
+        <classes>
+            <class name="tests.QuickAddTests"/>
+        </classes>
+    </test>
+    <test name="checkWorkoutAddedViaFullAdd">
+        <classes>
+            <class name="tests.FullAddTests"/>
+        </classes>
+    </test>
+    <test name="checkWorkoutContentCorrespondsInput">
+        <classes>
+            <class name="tests.WorkoutTests"/>
+        </classes>
+    </test>
+    <test name="checkOptionsWithinCalendar">
+        <classes>
+            <class name="tests.CalendarTests"/>
+        </classes>
+    </test>
+</suite>

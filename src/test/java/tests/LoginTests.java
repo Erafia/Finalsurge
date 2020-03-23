@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 @Log4j2
 public class LoginTests extends BaseTest {
 
-    @Test
+    @Test (description = "Check it is possible to login to the application using valid credentials")
     public void loginUsingValidCredentials(){
         loginRegistrationSteps.login(email, password);
     }

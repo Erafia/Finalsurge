@@ -6,8 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 @Log4j2
 public class LoginPage extends BasePage {
@@ -24,6 +23,7 @@ public class LoginPage extends BasePage {
         }
         catch (NoSuchElementException e){
             log.error("Page is not opened: element 'Login button' is not found.");
+            screenshot("login_page_not_opened");
             Assert.fail("Login page cannot be opened.");
         }
         return this;
@@ -39,6 +39,10 @@ public class LoginPage extends BasePage {
         log.info("Check user logged in: 'Logout' link should be available");
         $(By.partialLinkText("Logout")).shouldBe(Condition.visible, Condition.enabled);
     }
+    void isUserLoggedOut(){
+        log.info("Check user logged out: 'Login' link should be available");
+        $(By.partialLinkText("Login")).shouldBe(Condition.visible, Condition.enabled);
+    }
 
     public void logIn(String email, String password) {
         log.debug("Input value in 'Email' field: " + email);
@@ -49,5 +53,11 @@ public class LoginPage extends BasePage {
         $(By.id(LOGIN_FORM_ID)).find(LOGIN_BUTTON_CSS).click();
         log.info("Submitting login form");
         isUserLoggedIn();
+    }
+
+    public void logout() {
+        log.debug("Logging out from the application");
+        $(By.partialLinkText("Logout")).click();
+        isUserLoggedOut();
     }
 }

@@ -13,8 +13,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 @Log4j2
 public class CalendarPage extends BasePage {
@@ -23,8 +22,11 @@ public class CalendarPage extends BasePage {
     private String DATE_XPATH = "//td[@data-day = %s and @data-month = %s and @data-year = %s]";
     private String DATE_HOVER_XPATH = "//td[@align = 'center']";
     private static final String OPEN_DROPDOWN_ON_DATE_CSS = ".calendar-add.dropdown";
-    private String WORKOUT_XPATH = "//div[text() = '%s']";
+    private String WORKOUT_XPATH = "//div[contains(text(), '%s')]";
     private String WORKOUT_CSS = ".fc-event-activity";
+    private String WORKOUT_CALL_XPATH = "/ancestor::div[starts-with(@id, 'wid')]";
+    private String ALERT_OK_BUTTON_CSS = ".btn.btn-primary";
+    private String DATE_PICKER_XPATH = "//div[@class = 'datepicker dropdown-menu' and contains(@style, 'display: block')]//td[@class = 'day ' and text() = '%s']";
 
     public CalendarPage openPage() {
         log.info("Opening Calendar page of the application by url: " + CALENDAR_URL);
@@ -33,6 +35,7 @@ public class CalendarPage extends BasePage {
             isPageOpened();
         } catch (NoSuchElementException e) {
             log.error("Page is not opened: element 'Calendar' is not found.");
+            screenshot("calendar_page_not_opened");
             Assert.fail("Calendar page cannot be opened.");
         }
         return this;
@@ -53,8 +56,8 @@ public class CalendarPage extends BasePage {
      */
     public CalendarPage selectOptionFromDropDownOnDate(int day, int month, int year, String option) {
         log.info("Select '" + option + "' option for the date: " + month + "/" + day + "/" + year);
-        DATE_XPATH = String.format(DATE_XPATH, day, month, year);
-        $(By.xpath(DATE_XPATH + DATE_HOVER_XPATH)).hover()
+        String THIS_DATE_XPATH = String.format(DATE_XPATH, day, month, year);
+        $(By.xpath(THIS_DATE_XPATH + DATE_HOVER_XPATH)).hover()
                 .find(OPEN_DROPDOWN_ON_DATE_CSS).click();
         $(By.partialLinkText(option)).click();
         return this;
@@ -82,31 +85,32 @@ public class CalendarPage extends BasePage {
         int month = dateItems.get(0);
         int day = dateItems.get(1);
         int year = dateItems.get(2);
-        DATE_XPATH = String.format(DATE_XPATH, day, month, year);
-        WORKOUT_XPATH = String.format(WORKOUT_XPATH, workout.getActivityType());
+        String THIS_DATE_XPATH = String.format(DATE_XPATH, day, month, year);
+        String THIS_WORKOUT_XPATH = String.format(WORKOUT_XPATH, workout.getActivityType());
         if (shouldBePresent) {
-            $(By.xpath(DATE_XPATH + WORKOUT_XPATH)).shouldBe(Condition.visible);
+            $(By.xpath(THIS_DATE_XPATH + THIS_WORKOUT_XPATH)).shouldBe(Condition.visible);
         } else {
-            $(By.xpath(DATE_XPATH + WORKOUT_XPATH)).shouldNotBe(Condition.visible);
+            $(By.xpath(THIS_DATE_XPATH + THIS_WORKOUT_XPATH)).shouldNotBe(Condition.visible);
         }
         return this;
     }
 
-    public int getNumberOfTrainingsOnDate(int day, int month, int year){
+    public int getNumberOfWorkoutsOnDate(int day, int month, int year){
         log.info("Checking number of workouts created for date: " + month + "/" + day + "/" + year);
-        DATE_XPATH = String.format(DATE_XPATH, day, month, year);
-        List<SelenideElement> workouts = $(By.xpath(DATE_XPATH)).findAll(WORKOUT_CSS);
+        String THIS_DATE_XPATH = String.format(DATE_XPATH, day, month, year);
+        List<SelenideElement> workouts = $(By.xpath(THIS_DATE_XPATH)).findAll(WORKOUT_CSS);
         log.info("The number of workouts is: " + workouts.size());
         return workouts.size();
     }
-    public int getNumberOfTrainingsOnDate(int day, int month){
+
+    public int getNumberOfWorkoutsOnDate(int day, int month){
         Calendar now = Calendar.getInstance();
-        return getNumberOfTrainingsOnDate(day, month, now.get(Calendar.YEAR));
+        return getNumberOfWorkoutsOnDate(day, month, now.get(Calendar.YEAR));
     }
 
-    public int getNumberOfTrainingsOnDate(int day){
+    public int getNumberOfWorkoutsOnDate(int day){
         Calendar now = Calendar.getInstance();
-        return getNumberOfTrainingsOnDate(day, now.get(Calendar.MONTH) + 1, now.get(Calendar.YEAR));
+        return getNumberOfWorkoutsOnDate(day, now.get(Calendar.MONTH) + 1, now.get(Calendar.YEAR));
     }
 
     public static List<Integer> splitDate(String date) {
@@ -115,5 +119,30 @@ public class CalendarPage extends BasePage {
                 .map(dateValue -> Integer.parseInt(dateValue))
                 .collect(Collectors.toList());
         return intValues;
+    }
+
+    public CalendarPage selectActionOnEventByActivityType(Workout workout, String option){
+        log.debug("Click a workout was added to the date " + workout.getDate() + " and Activity type '" + workout.getActivityType() + "'");
+        List<Integer> dateItems = splitDate(workout.getDate());
+        int month = dateItems.get(0);
+        int day = dateItems.get(1);
+        int year = dateItems.get(2);
+        String THIS_DATE_XPATH = String.format(DATE_XPATH, day, month, year);
+        String THIS_WORKOUT_XPATH = String.format(WORKOUT_XPATH, workout.getActivityType());
+        String THIS_WORKOUT_CALL_XPATH = THIS_DATE_XPATH + THIS_WORKOUT_XPATH + WORKOUT_CALL_XPATH;
+        $(By.xpath(THIS_WORKOUT_CALL_XPATH)).click();
+        $(By.xpath(THIS_WORKOUT_CALL_XPATH)).find(By.partialLinkText(option)).click();
+        return this;
+    }
+
+    public CalendarPage confirmAlert(){
+        $(ALERT_OK_BUTTON_CSS).click();
+        return this;
+    }
+
+    public CalendarPage selectDayInDatePicker(int day){
+        String THIS_DATE_PICKER = String.format(DATE_PICKER_XPATH, day);
+        $(By.xpath(THIS_DATE_PICKER)).click();
+        return this;
     }
 }

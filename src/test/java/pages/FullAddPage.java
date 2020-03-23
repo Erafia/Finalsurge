@@ -7,8 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 import static elements.Checkbox.updateCheckbox;
 import static elements.Dropdown.selectOption;
 import static elements.Input.writeText;
@@ -45,6 +44,7 @@ public class FullAddPage extends BasePage{
             isPageOpened();
         } catch (NoSuchElementException e) {
             log.error("Page is not opened: element 'Activity Type List' is not found.");
+            screenshot("Full_add_page_not_opened");
             Assert.fail("Full Add Workout page cannot be opened.");
         }
         return this;
@@ -58,12 +58,18 @@ public class FullAddPage extends BasePage{
     public FullAddPage selectActivity(String activityType, String activitySubtype){
         log.info("Select '" + activityType + "' activity type with subtype = '"+ activitySubtype + "'  from the list of activities");
         ACTIVITY_TYPE_ID = String.format(ACTIVITY_TYPE_ID, activityType);
-        ACTIVITY_SUBTYPE_ID = String.format(ACTIVITY_SUBTYPE_ID, activitySubtype);
         $(By.xpath(ACTIVITY_TYPE_ID)).click();
-        $(By.xpath(ACTIVITY_SUBTYPE_ID)).click();
+        if (!activitySubtype.equals("No Sub-Type")) {
+            ACTIVITY_SUBTYPE_ID = String.format(ACTIVITY_SUBTYPE_ID, activitySubtype);
+            $(By.xpath(ACTIVITY_SUBTYPE_ID)).click();
+        }
         return this;
     }
 
+    /**
+     * One should distinguish the mood radio button and how I felt dropdown when generating a workout model
+     * for full add form a .moodRadioButton should be used when creating a model
+     */
     public FullAddPage fillInTheForm(Workout workoutModel) {
         writeText(DATE_FIELD_ID, workoutModel.getDate());
         writeText(TIME_FIELD_ID, workoutModel.getTimeOfDay());
@@ -80,7 +86,7 @@ public class FullAddPage extends BasePage{
         updateCheckbox(IS_RACE_CHECKBOX_ID, workoutModel.getMarkAsRace());
         updateCheckbox(SAVE_TO_LIBRARY_CHECKBOX_ID, workoutModel.getSaveToLibrary());
         writeText(CALORIES_BURNT_FIELD_ID, workoutModel.getCaloriesBurnt());
-        selectRadio(MOOD_RADIO_BUTTON_XPATH, workoutModel.getHowIFelt());
+        selectRadio(MOOD_RADIO_BUTTON_XPATH, workoutModel.getMoodRadioButton());
         return this;
     }
 

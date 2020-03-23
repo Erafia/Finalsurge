@@ -17,7 +17,8 @@ public class Workout {
     public String duration;
     public String pace;
     public String paceUnit;
-    public String howIFelt;
+    public String howIFeltDropdown;
+    public String moodRadioButton;
     public String perceivedEffort;
     public String notes;
     public String markAsRace;
