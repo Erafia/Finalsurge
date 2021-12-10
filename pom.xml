@@ -16,7 +16,7 @@
         <selenide.version>5.7.0</selenide.version>
         <allure-testng.version>2.12.1</allure-testng.version>
         <lombok.version>1.18.0</lombok.version>
-        <log4j-core.version>2.12.1</log4j-core.version>
+        <log4j-core.version>2.15.0</log4j-core.version>
         <yaml.version>2.10.1</yaml.version>
     </properties>
 
